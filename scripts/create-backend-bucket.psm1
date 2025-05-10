@@ -16,7 +16,7 @@ Function New-BackendBucket {
 
         # Associate the KMS key with the bucket
         $encryptionConfig =  @{ServerSideEncryptionByDefault = @{ServerSideEncryptionAlgorithm = "aws:kms";ServerSideEncryptionKeyManagementServiceKeyId = $kmsKey.KeyId}}
-        Set-S3BucketEncryption -BucketName $bucketName -ServerSideEncryptionConfiguration $encryptionConfig -Region $region       
+        Set-S3BucketEncryption -BucketName $bucketName -ServerSideEncryptionConfiguration_ServerSideEncryptionRule $encryptionConfig -Region $region       
        
     
         Write-Host "Created bucket $bucketName"

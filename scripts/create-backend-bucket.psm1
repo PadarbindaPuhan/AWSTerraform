@@ -1,15 +1,22 @@
 Function New-BackendBucket {
     param(
-        [Mandatory = $true]
+        [Parameter(Mandatory = $true)]
         [string]$bucketName,
 
-        [Mandatory = $true]
+        [Parameter(Mandatory = $true)]
         [string]$region
     )
     try{
         Import-Module AWSPowerShell.NetCore
 
-        New-S3Bucket -BucketName $bucketName -Region $region
+        # Create KMS Key
+        $kmsKey = New-KMSKey -Description "KMS key for $bucketName" -Region $region
+
+        $bucket = New-S3Bucket -BucketName $bucketName -Region $region
+
+        # Associate the KMS key with the bucket
+        $encryptionConfig = New-S3BucketEncryption -BucketName $bucketName -SSEKMSKeyId $kmsKey.KeyId -Region $region
+        
         Write-Host "Created bucket $bucketName"
     }
     catch{

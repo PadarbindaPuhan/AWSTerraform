@@ -1,11 +1,11 @@
 param(
-    [Mandatory = $true]
+    [Parameter(Mandatory = $true)]
     [string]$bucketName,
 
-    [Mandatory = $true]
+    [Parameter(Mandatory = $true)]
     [string]$dynamoDbTableName,
 
-    [Mandatory = $true]
+    [Parameter(Mandatory = $true)]
     [string]$region
 )
 

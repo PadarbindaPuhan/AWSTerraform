@@ -23,23 +23,32 @@ try{
         Import-Module ./create-backend-bucket.psm1
         New-BackendBucket -bucketName $bucketName -region $region
     }
-
-    Write-Host "Check if DynamoDB table $dynamoDbTableName exists in region $region and create it if not"
-
-    $dynamoDbTableInfo= Get-DDBTable -TableName $dynamoDbTableName
-    if($dynamoDbTableInfo){
-        Write-Host "DynamoDB table $dynamoDbTableName exists"
-    }
-    else{
-        Write-Host "Creating new DynamoDB table $dynamoDbTableName"
-        Import-Module ./create-backend-backend-dynamodb.psm1
-        New-BackendDynamoDBTable -tableName $dynamoDbTableName -region $region
-    }
-
 }
 catch{
     Write-Host "Error creating bucket"+$_.message
     exit(1)
 }
+
+Write-Host "Check if DynamoDB table $dynamoDbTableName exists in region $region and create it if not"
+
+try{
+    $dynamoDbTableInfo= Get-DDBTable -TableName $dynamoDbTableName -Region $region
+}
+catch
+{
+
+    if($_.Exception.Message -like "*Requested resource not found*"){
+        Write-Host "Creating new DynamoDB table $dynamoDbTableName"
+        Import-Module ./create-backend-backend-dynamodb.psm1
+        New-BackendDynamoDBTable -tableName $dynamoDbTableName -region $region
+    }
+    else{
+            Write-Host "Error checking DynamoDB table"+$_.message
+            exit(1)
+    }
+        
+}   
+
+
 
 

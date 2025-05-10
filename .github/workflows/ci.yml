@@ -2,12 +2,10 @@ name: "Setup AWS Infra"
 
 on:
   push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
-  setup-infra:
+  setup-backend-infra:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -29,5 +27,43 @@ jobs:
         shell: pwsh
         run: |
           cd ./scripts
-          
-          ./create-backend.ps1 -bucketName "pd-s3-state-bucket" -dynamoDbTableName "s3_lock_table" -region "us-west-2" 
+          ./create-backend.ps1 -bucketName "${{vars.BUCKETNAME}}" -dynamoDbTableName "${{vars.DYNAMODBTABLE}}" -region "${{vars.AWS_REGION}}"
+  
+  setup-plan-infra:
+    runs-on: ubuntu-latest
+    if: github.branch != 'main'
+    needs: setup-backend-infra
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: install terraform
+        uses: hashicorp/setup-terraform@v3
+      
+      - name: autheticate AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: ${{vars.AWS_REGION}}
+      
+      - name: initialize terraform
+        shell: bash
+        run: |
+          cd ./infrastructure
+          terraform init -backend-config="bucket=${{vars.BUCKETNAME}}" -backend-config="dynamodb_table=${{vars.DYNAMODBTABLE}}" -backend-config="region=${{vars.AWS_REGION}}" -backend-config="key=terraform.tfstate"
+      
+      - name: plan terraform
+        shell: bash
+        run: |
+          cd ./infrastructure
+          echo "environment = \"dev\"" > terraform.tfvars
+          terraform plan 
+  
+  setup-apply-infra:
+    runs-on: ubuntu-latest
+    if: github.branch == 'main'
+    needs: setup-backend-infra
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4

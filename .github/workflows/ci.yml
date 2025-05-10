@@ -1,6 +1,7 @@
 name: "Setup AWS Infra"
 
 on:
+  push:
   workflow_dispatch:
 
 jobs:
@@ -10,4 +11,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
 
-      
+      - name: install powershell dependencies
+        shell: pwsh
+        run: |
+          Install-Module -Name AWSPowerShell.NetCore -Force -SkipPublisherCheck -AllowClobber -Scope AllUsers

@@ -14,3 +14,9 @@ jobs:
       - name: install powershell dependencies
         run: |
           pwsh -Command "Install-Module -Name AWSPowerShell.NetCore -Force -SkipPublisherCheck -AllowClobber -Scope CurrentUser"
+      
+      - name: create backend
+        shell: pwsh
+        run: |
+          cd ./scripts
+          ./create-backend.ps1 -bucketName "s3_state_bucket" -dynamoDb "s3_lock_table" -region "us-west-2" 

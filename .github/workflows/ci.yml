@@ -2,7 +2,7 @@ name: "Setup AWS Infra"
 
 on:
   push:
-  workflow_dispatch:
+  pull_request:
 
 jobs:
   setup-backend-infra:
@@ -31,7 +31,7 @@ jobs:
   
   setup-plan-infra:
     runs-on: ubuntu-latest
-    if: github.branch != 'main'
+    if: github.ref != 'refs/heads/main'
     needs: setup-backend-infra
     steps:
       - name: checkout
@@ -62,7 +62,7 @@ jobs:
   
   setup-apply-infra:
     runs-on: ubuntu-latest
-    if: github.branch == 'main'
+    if: github.ref == 'refs/heads/main'
     needs: setup-backend-infra
     steps:
       - name: checkout

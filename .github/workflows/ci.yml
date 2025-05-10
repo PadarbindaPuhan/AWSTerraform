@@ -57,7 +57,7 @@ jobs:
         shell: bash
         run: |
           cd ./infrastructure
-          echo "environment = 'dev'" > terraform.tfvars
+          echo "environment = \"dev\"" > terraform.tfvars
           terraform plan 
   
   setup-apply-infra:

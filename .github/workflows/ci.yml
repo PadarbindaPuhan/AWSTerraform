@@ -12,6 +12,5 @@ jobs:
         uses: actions/checkout@v4
 
       - name: install powershell dependencies
-        shell: pwsh
         run: |
-          Install-Module -Name AWSPowerShell.NetCore -Force -SkipPublisherCheck -AllowClobber -Scope AllUsers
+          pwsh -Command "Install-Module -Name AWSPowerShell.NetCore -Force -SkipPublisherCheck -AllowClobber -Scope AllUsers"

@@ -1,6 +1,9 @@
 name: "Setup AWS Infra"
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -10,4 +13,21 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
 
+      - name: install powershell dependencies
+        run: |
+          pwsh -Command "Install-Module -Name AWSPowerShell.NetCore -Force -SkipPublisherCheck -AllowClobber -Scope CurrentUser"
+          pwsh -Command "Install-Module -Name AWS.Tools.Common -Force"
+
+      - name: autheticate AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: ${{vars.AWS_REGION}}
       
+      - name: create backend
+        shell: pwsh
+        run: |
+          cd ./scripts
+          
+          ./create-backend.ps1 -bucketName "pd-s3-state-bucket" -dynamoDbTableName "s3_lock_table" -region "us-west-2" 

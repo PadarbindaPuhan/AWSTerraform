@@ -1,7 +1,7 @@
 param(
-    [string]bucketName,
-    [string]dynamoDb,
-    [string]region
+    [string]$bucketName,
+    [string]$dynamoDb,
+    [string]$region
 )
 
 try{

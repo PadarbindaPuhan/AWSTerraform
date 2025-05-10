@@ -40,7 +40,7 @@ catch
     if($_.Exception.Message -like "*Requested resource not found*"){
         Write-Host "Creating new DynamoDB table $dynamoDbTableName"
         Import-Module ./create-backend-dynamodb.psm1
-        New-BackendDynamoDBTable -tableName $dynamoDbTableName -region $region
+        New-BackendDynamoDBTable -dynamoDbTableName $dynamoDbTableName -region $region
     }
     else{
             Write-Host "Error checking DynamoDB table"+$_.message

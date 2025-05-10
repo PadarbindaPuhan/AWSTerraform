@@ -1,10 +1,16 @@
 param(
+    [Mandatory = $true]
     [string]$bucketName,
-    [string]$dynamoDb,
+
+    [Mandatory = $true]
+    [string]$dynamoDbTableName,
+
+    [Mandatory = $true]
     [string]$region
 )
 
 try{
+    Import-Module AWSPowerShell.NetCore
     
     $bucketInfo= Get-S3Bucket -BucketName $bucketName
     
@@ -13,6 +19,8 @@ try{
     }
     else{
         Write-Host "Creating new bucket $bucketName"
+        Import-Module ./create-backend-bucket.psm1
+        New-BackendBucket -bucketName $bucketName -region $region
     }
 }
 catch{

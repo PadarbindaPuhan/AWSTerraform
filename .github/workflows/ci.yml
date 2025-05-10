@@ -27,5 +27,5 @@ jobs:
         shell: pwsh
         run: |
           cd ./scripts
-          Import-Module AWSPowerShell.NetCore
+          
           ./create-backend.ps1 -bucketName "s3_state_bucket" -dynamoDb "s3_lock_table" -region "us-west-2" 

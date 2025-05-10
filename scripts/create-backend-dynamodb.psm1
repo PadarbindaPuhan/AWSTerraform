@@ -10,7 +10,7 @@ Function New-BackendDynamoDBTable {
         Import-Module AWSPowerShell.NetCore
 
         # Create DynamoDB table
-        $schema = New-DDTableSchema   
+        $schema = New-DDBTableSchema   
         $schema | Add-DDBKeySchema -KeyName "LockID" -KeyDatatype "S"  
         $schema | New-DDBTable -TableName $dynamoDbTableName -Region $region -ReadCapacity 5 -WriteCapacity 5
             

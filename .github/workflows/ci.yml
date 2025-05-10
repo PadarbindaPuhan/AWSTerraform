@@ -1,0 +1,13 @@
+name: "Setup AWS Infra"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup-infra:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      

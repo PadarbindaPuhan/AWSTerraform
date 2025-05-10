@@ -1,6 +1,6 @@
 param(
-    [string]bucketName
-    [string]dynamoDb
+    [string]bucketName,
+    [string]dynamoDb,
     [string]region
 )
 

@@ -7,7 +7,7 @@ variable "ami" {
 variable "instance_type" {
   description = "The type of instance to start"
   type        = string
-  default     = "t2.micro"
+  default     = "t3.micro"
 }
 
 variable "vpc_id" {

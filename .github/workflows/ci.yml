@@ -30,4 +30,4 @@ jobs:
         run: |
           cd ./scripts
           
-          ./create-backend.ps1 -bucketName "s3_state_bucket" -dynamoDb "s3_lock_table" -region "us-west-2" 
+          ./create-backend.ps1 -bucketName "pd/s3_state_bucket" -dynamoDb "s3_lock_table" -region "us-west-2" 

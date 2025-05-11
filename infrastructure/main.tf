@@ -9,7 +9,7 @@ module "web_application_server" {
   instance_type = "t3.micro"
   subnet_id     = "subnet-0db2c89226baaf431"
   environment   = var.environment
-  security_groups = [module.allow_all_security_group.security_group_name]
+  security_groups = [module.allow_all_security_group.security_group_id]
 
 }
 

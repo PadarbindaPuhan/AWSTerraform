@@ -26,3 +26,9 @@ variable "environment" {
   description = "The environment to deploy to"
   type        = string
 }
+
+variable "security_groups" {
+  description = "The security groups to associate with the instance"
+  type        = list(string)
+  default     = []
+}

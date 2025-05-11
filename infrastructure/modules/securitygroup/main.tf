@@ -12,7 +12,7 @@ resource "aws_security_group" "allow_all" {
   
 
   tags = {
-    Name        = "${var.environment}-web-app-instance"
+    Name        = "${var.environment}-security-group"
     Environment = var.environment
   }
 }

@@ -3,7 +3,6 @@ name: "Setup AWS Infra"
 on:
   push:
     branches:
-      - '*'
       - '!main'
   pull_request:
 

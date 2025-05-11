@@ -36,6 +36,7 @@ jobs:
 
   setup-apply-infra:
     runs-on: ubuntu-latest
+    needs: setup-plan-infra
     environment: buildinfra
     steps:
       - name: checkout

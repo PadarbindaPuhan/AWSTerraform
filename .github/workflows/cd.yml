@@ -72,6 +72,7 @@ jobs:
       
       - name: print output
         run: |
+          cd ./infrastructure
           cat terraform_output.json
 
  

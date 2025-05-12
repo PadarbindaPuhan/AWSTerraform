@@ -8,4 +8,4 @@ resource "aws_instance" "web_app" {
     Name        = "${var.environment}-web-app-instance"
     Environment = var.environment
   }
-}
+} 

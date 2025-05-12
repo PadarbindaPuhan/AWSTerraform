@@ -77,6 +77,6 @@ jobs:
     steps:
       - name: print public ip address
         run: |
-          echo "Public IP Address: ${{ needs.setup-apply-infra.outputs.terraform_output }}"
+          echo "Public IP of EC2 is: ${{ needs.setup-apply-infra.outputs.terraform_output }}"
           
 

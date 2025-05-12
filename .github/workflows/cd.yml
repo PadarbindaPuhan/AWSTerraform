@@ -38,8 +38,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup-plan-infra
     environment: buildinfra
-    outputs:
-      terraform_output: ${{ steps.terraform_apply.outputs.value }}
+    # outputs:
+    #   terraform_output: ${{ steps.terraform_apply.outputs.value }}
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -67,16 +67,20 @@ jobs:
           cd ./infrastructure
           echo "environment = \"dev\"" > terraform.tfvars
           terraform apply -auto-approve 
-          terraform output -json > terraform_output.json 
-          echo "public_ip_address=$(cat terraform_output.json)" >> $GITHUB_OUTPUT
+          terraform output -json > terraform_output.json
+          # echo "public_ip_address=$(cat terraform_output.json)" >> $GITHUB_OUTPUT
+      
+      - name: print output
+        run: |
+          cat terraform_output.json
 
  
-  configure-infra:
-    runs-on: ubuntu-latest
-    needs: setup-apply-infra
-    steps:
-      - name: print public ip address
-        run: |
-          echo "Public IP of EC2 is: ${{ needs.setup-apply-infra.outputs.terraform_output }}"
+  # configure-infra:
+  #   runs-on: ubuntu-latest
+  #   needs: setup-apply-infra
+  #   steps:
+  #     - name: print public ip address
+  #       run: |
+  #         echo "Public IP of EC2 is: ${{ needs.setup-apply-infra.outputs.terraform_output }}"
           
 

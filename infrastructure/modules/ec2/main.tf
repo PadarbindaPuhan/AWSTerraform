@@ -7,6 +7,7 @@ resource "aws_instance" "web_app" {
               #!/bin/bash
               echo "{var.public_key}" > /home/ubuntu/.ssh/authorized_keys
               EOF
+  key_name      = var.key_pair
   tags = {
     Name        = "${var.environment}-web-app-instance"
     Environment = var.environment

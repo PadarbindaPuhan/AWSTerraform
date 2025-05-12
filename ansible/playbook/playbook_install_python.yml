@@ -1,0 +1,10 @@
+---
+- name: Install Python
+  hosts: {{ ansible_hostname }}
+  #become: yes
+
+  tasks:
+    - name: Install Python package
+      apt:
+        name: apache2
+        state: present

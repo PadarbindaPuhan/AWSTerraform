@@ -32,3 +32,8 @@ variable "security_groups" {
   type        = list(string)
   default     = []
 }
+
+variable "key_pair" {
+  description = "The name of the key pair to use for SSH access"
+  type        = string
+}

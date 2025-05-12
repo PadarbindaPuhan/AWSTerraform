@@ -68,12 +68,16 @@ jobs:
           echo "environment = \"dev\"" > terraform.tfvars
           terraform apply -auto-approve 
           terraform output -json > terraform_output.json
-          # echo "public_ip_address=$(cat terraform_output.json)" >> $GITHUB_OUTPUT
       
       - name: print output
+
         run: |
           cd ./infrastructure
-          cat terraform_output.json
+          # read terraform_output.json
+          public_ip=$(cat terraform_output.json | jq -r '.web_application_server_instance_public_ip_address.value')
+          echo "Public IP of EC2 is: $public_ip"
+
+
 
  
   # configure-infra:

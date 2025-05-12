@@ -73,6 +73,7 @@ jobs:
  
   configure-infra:
     runs-on: ubuntu-latest
+    needs: setup-apply-infra
     steps:
       - name: print public ip address
         run: |

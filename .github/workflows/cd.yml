@@ -7,88 +7,88 @@ on:
     
       
 jobs:
-  # setup-plan-infra:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: checkout
-  #       uses: actions/checkout@v4
+  setup-plan-infra:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
 
-  #     - name: install terraform
-  #       uses: hashicorp/setup-terraform@v3
+      - name: install terraform
+        uses: hashicorp/setup-terraform@v3
       
-  #     - name: autheticate AWS
-  #       uses: aws-actions/configure-aws-credentials@v4
-  #       with:
-  #         aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
-  #         aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-  #         aws-region: ${{vars.AWS_REGION}}
+      - name: autheticate AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: ${{vars.AWS_REGION}}
       
-  #     - name: initialize terraform
-  #       shell: bash
-  #       run: |
-  #         cd ./infrastructure
-  #         terraform init -backend-config="bucket=${{vars.BUCKETNAME}}" -backend-config="dynamodb_table=${{vars.DYNAMODBTABLE}}" -backend-config="region=${{vars.AWS_REGION}}" -backend-config="key=terraform.tfstate"
+      - name: initialize terraform
+        shell: bash
+        run: |
+          cd ./infrastructure
+          terraform init -backend-config="bucket=${{vars.BUCKETNAME}}" -backend-config="dynamodb_table=${{vars.DYNAMODBTABLE}}" -backend-config="region=${{vars.AWS_REGION}}" -backend-config="key=terraform.tfstate"
       
-  #     - name: plan terraform
-  #       shell: bash
-  #       run: |
-  #         cd ./infrastructure
-  #         echo "environment = \"dev\"" > terraform.tfvars
-  #         echo "keypair_public_key = \"${{secrets.ACCESS_KEY_PAIR}}\"" >> terraform.tfvars
-  #         terraform plan   
+      - name: plan terraform
+        shell: bash
+        run: |
+          cd ./infrastructure
+          echo "environment = \"dev\"" > terraform.tfvars
+          echo "keypair_public_key = \"${{secrets.ACCESS_KEY_PAIR}}\"" >> terraform.tfvars
+          terraform plan   
 
-  # setup-apply-infra:
-  #   runs-on: ubuntu-latest
-  #   needs: setup-plan-infra
-  #   environment: buildinfra
-  #   outputs:
-  #     public_ip: ${{ steps.print_output.outputs.public_ip }}
-  #   steps:
-  #     - name: checkout
-  #       uses: actions/checkout@v4
+  setup-apply-infra:
+    runs-on: ubuntu-latest
+    needs: setup-plan-infra
+    environment: buildinfra
+    outputs:
+      public_ip: ${{ steps.print_output.outputs.public_ip }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
 
-  #     - name: install terraform
-  #       uses: hashicorp/setup-terraform@v3
+      - name: install terraform
+        uses: hashicorp/setup-terraform@v3
       
-  #     - name: autheticate AWS
-  #       uses: aws-actions/configure-aws-credentials@v4
-  #       with:
-  #         aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
-  #         aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-  #         aws-region: ${{vars.AWS_REGION}}
+      - name: autheticate AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: ${{vars.AWS_REGION}}
 
-  #     - name: initialize terraform
-  #       shell: bash
-  #       run: |
-  #         cd ./infrastructure
-  #         terraform init -backend-config="bucket=${{vars.BUCKETNAME}}" -backend-config="dynamodb_table=${{vars.DYNAMODBTABLE}}" -backend-config="region=${{vars.AWS_REGION}}" -backend-config="key=terraform.tfstate"
+      - name: initialize terraform
+        shell: bash
+        run: |
+          cd ./infrastructure
+          terraform init -backend-config="bucket=${{vars.BUCKETNAME}}" -backend-config="dynamodb_table=${{vars.DYNAMODBTABLE}}" -backend-config="region=${{vars.AWS_REGION}}" -backend-config="key=terraform.tfstate"
         
-  #     - name: apply terraform
-  #       id: terraform_apply
-  #       shell: bash
-  #       run: |
-  #         cd ./infrastructure
-  #         echo "environment = \"dev\"" > terraform.tfvars
-  #         echo "keypair_public_key = \"${{secrets.ACCESS_KEY_PAIR}}\"" >> terraform.tfvars
-  #         terraform apply -auto-approve 
-  #         terraform output -json > terraform_output.json
+      - name: apply terraform
+        id: terraform_apply
+        shell: bash
+        run: |
+          cd ./infrastructure
+          echo "environment = \"dev\"" > terraform.tfvars
+          echo "keypair_public_key = \"${{secrets.ACCESS_KEY_PAIR}}\"" >> terraform.tfvars
+          terraform apply -auto-approve 
+          terraform output -json > terraform_output.json
       
-  #     - name: print output
-  #       id: print_output
-  #       run: |
-  #         cd ./infrastructure
-  #         # read terraform_output.json
-  #         public_ip=$(cat terraform_output.json | jq -r '.web_application_server_instance_public_ip_address.value')
-  #         echo "Public IP of EC2 is: $public_ip"
-  #         echo "::set-output name=public_ip::$public_ip"
+      - name: print output
+        id: print_output
+        run: |
+          cd ./infrastructure
+          # read terraform_output.json
+          public_ip=$(cat terraform_output.json | jq -r '.web_application_server_instance_public_ip_address.value')
+          echo "Public IP of EC2 is: $public_ip"
+          echo "::set-output name=public_ip::$public_ip"
  
   configure-infra:
     runs-on: ubuntu-latest  
-    #needs: setup-apply-infra
+    needs: setup-apply-infra
     steps:
-      # - name: print public ip address
-      #   run: |
-      #     echo "Public IP of EC2 is: ${{ needs.setup-apply-infra.outputs.public_ip }}"
+      - name: print public ip address
+        run: |
+          echo "Public IP of EC2 is: ${{ needs.setup-apply-infra.outputs.public_ip }}"
 
       - name: checkout
         uses: actions/checkout@v4
@@ -103,9 +103,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install ansible
       
-      - name: check ansible version
+      - name: run ansible playbook
         run: |
-          ansible --version
+          public_ip = ${{ needs.setup-apply-infra.outputs.public_ip }}
+
+          ansible-playbook ./ansible/playbook/playbook_install_python.yml -i ./ansible/inventory/web_inventory.ini --extra-vars "ansible_host=$public_ip ansible_user=ubuntu ansible_ssh_private_key=${{ secrets.ACCESS_PRIVATE_KEY }}"
 
       
           

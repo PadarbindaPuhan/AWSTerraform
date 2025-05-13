@@ -105,8 +105,6 @@ jobs:
       
       - name: run ansible playbook
         run: |
-          # ansible-playbook ./ansible/playbook/playbook_install_python.yml -i ${{ needs.setup-apply-infra.outputs.public_ip }} -u ubuntu --private-key="${{ secrets.ACCESS_PRIVATE_KEY }}"
-
           ansible-playbook ./ansible/playbook/playbook_install_python.yml -i ./ansible/inventory/web_inventory.ini --extra-vars "ansible_host=web_app_servers ansible_user=ubuntu ansible_ssh_private_key='${{ secrets.ACCESS_PRIVATE_KEY }}'"
       
           

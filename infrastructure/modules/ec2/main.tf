@@ -3,10 +3,6 @@ resource "aws_instance" "web_app" {
   instance_type = var.instance_type
   subnet_id = var.subnet_id
   vpc_security_group_ids = var.security_groups
-  user_data = <<-EOF
-              #!/bin/bash
-              echo "{var.public_key}" > /home/ubuntu/.ssh/authorized_keys
-              EOF
   key_name      = var.key_pair
   tags = {
     Name        = "${var.environment}-web-app-instance"

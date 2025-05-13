@@ -19,7 +19,6 @@ module "web_application_server" {
   environment   = var.environment
   security_groups = [module.allow_all_security_group.security_group_id]
   key_pair      = module.keypair.key_name
-  public_key    = module.keypair.public_key
 }
 
 

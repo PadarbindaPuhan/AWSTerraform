@@ -105,7 +105,7 @@ jobs:
       
       - name: run ansible playbook
         run: |
-          ansible-playbook ./ansible/playbook/playbook_install_python.yml --inventory ${{ needs.setup-apply-infra.outputs.public_ip }} --user ubuntu --private-key=${{ secrets.ACCESS_PRIVATE_KEY }}
+          ansible-playbook ./ansible/playbook/playbook_install_python.yml -i ${{ needs.setup-apply-infra.outputs.public_ip }} -u ubuntu --private-key="${{ secrets.ACCESS_PRIVATE_KEY }}"
 
       
           

@@ -1,6 +1,6 @@
 ---
 - name: Install Python
-  hosts: all
+  hosts: {{ ansible_host }}
   tasks:
     - name: Install Python package
       apt:
